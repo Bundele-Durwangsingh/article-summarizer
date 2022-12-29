@@ -3,22 +3,44 @@ import nltk
 from textblob import TextBlob
 from newspaper import Article
 
-nltk.download('punkt')
+def summerize():
+    url=urltext.get('1.0','end').strip()
+    article = Article(url)
+    article.download()
+    article.parse()
+    article.nlp()
 
-url = "https://www.ndtv.com/india-news/no-local-poll-without-obc-quota-yogi-adityanath-after-setback-in-court-3641956"
-article = Article(url)
-article.download()
-article.parse()
-article.nlp()
-print(f'Title :{article.title}')
-print(f'Author :{article.authors}')
-print(f'Publication Date :{article.publish_date}')
-print(f'Summary :{article.summary}')
+    title.config(state='normal')
+    author.config(state='normal')
+    publicatin_date.config(state='normal')
+    summary.config(state='normal')
+    sentiments.config(state='normal')
+    
+    title.delete('1.0','end')
+    title.insert('1.0',article.title)
 
-analysis = TextBlob(article.text)
-print(analysis.polarity)
-print(
-    f'Sentiments :{"Positive" if analysis.polarity >0 else "Negative" if analysis.polarity<0 else "Netural"}')
+    author.delete('1.0','end')
+    author.insert('1.0',article.authors)
+
+    publicatin_date.delete('1.0','end')
+    publicatin_date.insert('1.0',article.publish_date)
+
+    summary.delete('1.0','end')
+    summary.insert('1.0',article.summary)
+
+    analysis = TextBlob(article.text)
+    sentiments.delete('1.0','end')
+    sentiments.insert('1.0'f'polarity : {analysis.polarity},Sentiments :{"Positive" if analysis.polarity >0 else "Negative" if analysis.polarity<0 else "Netural"}')
+
+    title.config(state='disabled')
+    author.config(state='disabled')
+    publicatin_date.config(state='disabled')
+    summary.config(state='disabled')
+    sentiments.config(state='disabled')
+
+
+
+    
 
 # Bulding GUI
 root = tk.Tk()
@@ -57,9 +79,9 @@ sentiments.pack()
 # url
 ulabel = tk.Label(root, text='URL')
 ulabel.pack()
-url = tk.Text(root, height=1, width=140)
-url.pack()
+urltext = tk.Text(root, height=1, width=140)
+urltext.pack()
 # Button
-btn = tk.Button(root, text='Submit',)
+btn = tk.Button(root, text='Submit',command=summerize)
 btn.pack()
 root.mainloop()
